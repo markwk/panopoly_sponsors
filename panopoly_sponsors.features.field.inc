@@ -313,6 +313,9 @@ function panopoly_sponsors_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_sponsoring_level',
+      'field_permissions' => array(
+        'type' => '0',
+      ),
       'foreign keys' => array(),
       'indexes' => array(
         'value' => array(
@@ -389,6 +392,9 @@ function panopoly_sponsors_field_default_fields() {
         0 => 'node',
       ),
       'field_name' => 'body',
+      'field_permissions' => array(
+        'type' => '0',
+      ),
       'foreign keys' => array(
         'format' => array(
           'columns' => array(
@@ -404,7 +410,9 @@ function panopoly_sponsors_field_default_fields() {
       ),
       'locked' => '0',
       'module' => 'text',
-      'settings' => array(),
+      'settings' => array(
+        'profile2_private' => FALSE,
+      ),
       'translatable' => '0',
       'type' => 'text_with_summary',
     ),
@@ -466,6 +474,9 @@ function panopoly_sponsors_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_logo',
+      'field_permissions' => array(
+        'type' => '0',
+      ),
       'foreign keys' => array(
         'fid' => array(
           'columns' => array(
@@ -483,6 +494,7 @@ function panopoly_sponsors_field_default_fields() {
       'module' => 'image',
       'settings' => array(
         'default_image' => 0,
+        'profile2_private' => FALSE,
         'uri_scheme' => 'public',
       ),
       'translatable' => '0',
@@ -544,104 +556,6 @@ function panopoly_sponsors_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-panopoly_sponsor-field_order'.
-  $fields['node-panopoly_sponsor-field_order'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_order',
-      'field_permissions' => array(
-        'type' => '1',
-      ),
-      'foreign keys' => array(
-        'node' => array(
-          'columns' => array(
-            'target_id' => 'nid',
-          ),
-          'table' => 'node',
-        ),
-      ),
-      'indexes' => array(
-        'target_id' => array(
-          0 => 'target_id',
-        ),
-      ),
-      'locked' => '0',
-      'module' => 'entityreference',
-      'settings' => array(
-        'handler' => 'base',
-        'handler_settings' => array(
-          'behaviors' => array(
-            'views-select-list' => array(
-              'status' => 0,
-            ),
-          ),
-          'sort' => array(
-            'type' => 'none',
-          ),
-          'target_bundles' => array(
-            'commerce_order' => 'commerce_order',
-          ),
-        ),
-        'profile2_private' => FALSE,
-        'target_type' => 'commerce_order',
-      ),
-      'translatable' => '0',
-      'type' => 'entityreference',
-    ),
-    'field_instance' => array(
-      'bundle' => 'panopoly_sponsor',
-      'default_value' => NULL,
-      'default_value_function' => '',
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'entityreference',
-          'settings' => array(
-            'link' => FALSE,
-          ),
-          'type' => 'entityreference_label',
-          'weight' => 5,
-        ),
-        'featured' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'field_order',
-      'label' => 'Order',
-      'required' => 0,
-      'settings' => array(
-        'behaviors' => array(
-          'prepopulate' => array(
-            'status' => 0,
-          ),
-        ),
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'options',
-        'settings' => array(),
-        'type' => 'options_select',
-        'weight' => '8',
-      ),
-    ),
-  );
-
   // Exported field: 'node-panopoly_sponsor-field_sponsoring_level'.
   $fields['node-panopoly_sponsor-field_sponsoring_level'] = array(
     'field_config' => array(
@@ -650,6 +564,9 @@ function panopoly_sponsors_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_sponsoring_level',
+      'field_permissions' => array(
+        'type' => '0',
+      ),
       'foreign keys' => array(),
       'indexes' => array(
         'value' => array(
@@ -720,6 +637,9 @@ function panopoly_sponsors_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_sponsorship_level',
+      'field_permissions' => array(
+        'type' => '2',
+      ),
       'foreign keys' => array(),
       'indexes' => array(
         'value' => array(
@@ -737,6 +657,7 @@ function panopoly_sponsors_field_default_fields() {
           'Media' => 'Media',
         ),
         'allowed_values_function' => '',
+        'profile2_private' => FALSE,
       ),
       'translatable' => '0',
       'type' => 'list_text',
@@ -881,7 +802,6 @@ function panopoly_sponsors_field_default_fields() {
   // Included for use with string extractors like potx.
   t('Body');
   t('Logo');
-  t('Order');
   t('Price');
   t('Registration');
   t('Sponsoring level');

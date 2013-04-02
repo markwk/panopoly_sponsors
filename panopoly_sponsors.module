@@ -9,6 +9,47 @@ include_once 'panopoly_sponsors.features.inc';
 
 
 /**
+ * Implements hook_menu().
+ */
+function panopoly_sponsors_menu() {
+  $items['admin/panopoly/settings/panopoly_sponsors'] = array(
+    'title'=> 'Panopoly Sponsors',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('_panopoly_sponsors_product_types'),
+    'access arguments' => array('configure store'),
+    'type'  => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+
+function _panopoly_sponsors_product_types(){
+  $form['panopoly_sponsors'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Panopoly Sponsors Configuration'),
+      '#description' => '',
+    );
+
+  $product_types = commerce_product_types();
+
+  foreach($product_types as $product_type){
+    $types[$product_type['type']] = $product_type['name'];
+  }
+
+    $form['panopoly_sponsors']['panopoly_sponsors_product_types'] = array(
+       '#type' => 'select',
+       '#title' => t('Product Types'),
+       '#options' => $types,
+       '#multiple'  => TRUE,
+       '#default_value' => variable_get('panopoly_sponsors_product_types', ''),
+       '#description' => t('Set this to the Product Types that trigger the sponsor form during checkout.'),
+    );
+    return system_settings_form($form);
+
+
+  }
+
+/**
  * Implements hook_commerce_checkout_page_info().
  */
 function panopoly_sponsors_commerce_checkout_page_info() {
@@ -23,6 +64,8 @@ function panopoly_sponsors_commerce_checkout_page_info() {
   );
   return $checkout_pages;
 }
+
+
 
 
 /**
@@ -76,8 +119,9 @@ function panopoly_sponsors_pane_checkout_form($form, &$form_state, $checkout_pan
  * Implements hook_form_alter().
  */
 function panopoly_sponsors_form_alter(&$form, &$form_state) {
-  form_load_include($form_state,'inc','node','node.pages');
+  //form_load_include($form_state,'inc','node','node.pages');
 }
+
 
 
 /**
@@ -128,9 +172,10 @@ function panopoly_sponsors_commerce_checkout_router($order, $checkout_page) {
     // if there is, I dont want to skip the step
     foreach (entity_metadata_wrapper('commerce_order', $order)->commerce_line_items as $delta => $line_item_wrapper) {
       if (in_array($line_item_wrapper->type->value(), commerce_product_line_item_types())) {
-        // if one of the items in the cart have either supporting or sponsoring then DO NOT skip the node creation form
-        // I need to check the type of the product because if the field_sponsoring_level field is not available I get an error
-        if($line_item_wrapper->commerce_product->type->raw()=='sponsor_event'){
+
+        // if the product has an field_sponsoring_level
+        // && has been specifically set in config page
+        if(array_key_exists('field_sponsoring_level',$line_item_wrapper->commerce_product->getPropertyInfo()) && in_array($line_item_wrapper->commerce_product->type->raw(),variable_get('panopoly_sponsors_product_types'))){
           //check the actual values
           if($line_item_wrapper->commerce_product->field_sponsoring_level->raw()!=''){
             $skip[] = 'no';
@@ -141,19 +186,18 @@ function panopoly_sponsors_commerce_checkout_router($order, $checkout_page) {
 
     // skip the node node creation form
     if(!in_array('no',$skip)){
+
       $checkout_pages = commerce_checkout_pages();
       $checkout_pages_keys = array_keys($checkout_pages);
-      $checkout_position = array_search($checkout_page, $checkout_pages);
+      $checkout_position = array_search($checkout_page['page_id'], $checkout_pages_keys);
       if (isset($checkout_pages_keys[$checkout_position + 1])) {
-        $checkout_next_page = $checkout_pages_keys[$checkout_position + 1];
-        commerce_order_status_update($order,'checkout_checkout');
-        drupal_goto('checkout/'. $order->order_number  .'/' . $checkout_next_page);
+        $order = commerce_order_status_update($order,'checkout_'.$checkout_page['next_page']);
+        drupal_goto('checkout/'. $order->order_number  .'/' . $checkout_page['next_page']);
       }
     }
-
   }
 
-  // save the sponsor node
+/*  // save the sponsor node
   if ($checkout_page['page_id'] == 'complete' && isset($order->data['node'])) {
 
     $sponsor_levels = array();
@@ -162,8 +206,10 @@ function panopoly_sponsors_commerce_checkout_router($order, $checkout_page) {
       // this line item is a product AND
       // is a type of 'sponsor_event' AND
       // the sponsor event field is set
-      if (in_array($line_item_wrapper->type->value(), commerce_product_line_item_types()) && $line_item_wrapper->commerce_product->type->raw()=='sponsor_event' && $line_item_wrapper->commerce_product->field_sponsoring_level->raw()!='') {
-        $sponsor_levels[] = $line_item_wrapper->commerce_product->field_sponsoring_level->raw();
+      if(array_key_exists('field_sponsoring_level',$line_item_wrapper->commerce_product->getPropertyInfo()) && in_array($line_item_wrapper->commerce_product->type->raw(),variable_get('panopoly_sponsors_product_types'))){
+        if($line_item_wrapper->commerce_product->field_sponsoring_level->raw()!=''){
+          $sponsor_levels[] = $line_item_wrapper->commerce_product->field_sponsoring_level->raw();
+        }
       }
     }
 
@@ -186,5 +232,56 @@ function panopoly_sponsors_commerce_checkout_router($order, $checkout_page) {
     $node->status = 0;
     node_save($node);
     unset($order->data['node']);
-  }
+  }*/
 }
+
+
+
+/**
+ * Implements hook_commerce_checkout_complete().
+ *
+ * This is for business logic after the order completes.
+ *
+ * @param object $order
+ *   The current order.
+ */
+function panopoly_sponsors_commerce_checkout_complete($order) {
+
+if(isset($order->data['node'])){
+
+    $sponsor_levels = array();
+    foreach (entity_metadata_wrapper('commerce_order', $order)->commerce_line_items as $delta => $line_item_wrapper) {
+
+      // check IF:
+      // this line item is a product AND
+      // is a type of 'sponsor_event' AND
+      // the sponsor event field is set
+      if(array_key_exists('field_sponsoring_level',$line_item_wrapper->commerce_product->getPropertyInfo()) && in_array($line_item_wrapper->commerce_product->type->raw(),variable_get('panopoly_sponsors_product_types'))){
+        if($line_item_wrapper->commerce_product->field_sponsoring_level->raw()!=''){
+          $sponsor_levels[] = $line_item_wrapper->commerce_product->field_sponsoring_level->raw();
+        }
+      }
+    }
+
+    // the prevailing sponsor type is the lowest value
+    $sponsor_level = min($sponsor_levels);
+
+    $node = (object) $order->data['node'];
+    // unset field_logo or this gives an error.
+    // @todo: remove this when the image upload is fixed
+    $node->field_logo = array();
+    if(isset($sponsor_level))
+    {
+      $node->field_sponsoring_level['und'][0]['value']=$sponsor_level;
+    }
+
+    $node->field_order['und'][0]['target_id'] = $order->order_id;
+    $node->uid = $order->uid;
+
+    //set unpublished
+    $node->status = 0;
+    node_save($node);
+    unset($order->data['node']);
+}
+}
+

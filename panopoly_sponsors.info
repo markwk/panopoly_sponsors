@@ -26,7 +26,6 @@ features[field][] = commerce_product-sponsor_event-field_registration
 features[field][] = commerce_product-sponsor_event-field_sponsoring_level
 features[field][] = node-panopoly_sponsor-body
 features[field][] = node-panopoly_sponsor-field_logo
-features[field][] = node-panopoly_sponsor-field_order
 features[field][] = node-panopoly_sponsor-field_sponsoring_level
 features[field][] = node-panopoly_sponsor-field_sponsorship_level
 features[field][] = node-panopoly_sponsor-field_url

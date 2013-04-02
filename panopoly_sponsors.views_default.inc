@@ -56,7 +56,7 @@ function panopoly_sponsors_views_default_views() {
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = '';
   $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
-  /* Field: Content: Sponsorship Level */
+  /* Field: Field: Sponsorship Level */
   $handler->display->display_options['fields']['field_sponsorship_level']['id'] = 'field_sponsorship_level';
   $handler->display->display_options['fields']['field_sponsorship_level']['table'] = 'field_data_field_sponsorship_level';
   $handler->display->display_options['fields']['field_sponsorship_level']['field'] = 'field_sponsorship_level';
@@ -105,8 +105,7 @@ function panopoly_sponsors_views_default_views() {
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Sponsorship Management';
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'perm';
-  $handler->display->display_options['access']['perm'] = 'edit own panopoly_sponsor content';
+  $handler->display->display_options['access']['type'] = 'none';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
@@ -332,14 +331,6 @@ function panopoly_sponsors_views_default_views() {
   $handler->display->display_options['fields']['status']['field'] = 'status';
   $handler->display->display_options['fields']['status']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['status']['not'] = 0;
-  /* Field: Content: Order */
-  $handler->display->display_options['fields']['field_order']['id'] = 'field_order';
-  $handler->display->display_options['fields']['field_order']['table'] = 'field_data_field_order';
-  $handler->display->display_options['fields']['field_order']['field'] = 'field_order';
-  $handler->display->display_options['fields']['field_order']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_order']['settings'] = array(
-    'link' => 1,
-  );
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
@@ -404,14 +395,6 @@ function panopoly_sponsors_views_default_views() {
   $handler->display->display_options['fields']['status']['field'] = 'status';
   $handler->display->display_options['fields']['status']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['status']['not'] = 0;
-  /* Field: Content: Order */
-  $handler->display->display_options['fields']['field_order']['id'] = 'field_order';
-  $handler->display->display_options['fields']['field_order']['table'] = 'field_data_field_order';
-  $handler->display->display_options['fields']['field_order']['field'] = 'field_order';
-  $handler->display->display_options['fields']['field_order']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_order']['settings'] = array(
-    'link' => 1,
-  );
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
@@ -428,11 +411,15 @@ function panopoly_sponsors_views_default_views() {
   $handler->display->display_options['arguments']['uid']['id'] = 'uid';
   $handler->display->display_options['arguments']['uid']['table'] = 'node';
   $handler->display->display_options['arguments']['uid']['field'] = 'uid';
-  $handler->display->display_options['arguments']['uid']['default_action'] = 'empty';
+  $handler->display->display_options['arguments']['uid']['default_action'] = 'access denied';
   $handler->display->display_options['arguments']['uid']['default_argument_type'] = 'fixed';
   $handler->display->display_options['arguments']['uid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['uid']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['uid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['uid']['specify_validation'] = TRUE;
+  $handler->display->display_options['arguments']['uid']['validate']['type'] = 'php';
+  $handler->display->display_options['arguments']['uid']['validate_options']['code'] = '$user = user_load($argument);
+if(isset($user->roles[5]))return true;';
   $handler->display->display_options['path'] = 'user/%/sponsorship';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'Sponsorship';
