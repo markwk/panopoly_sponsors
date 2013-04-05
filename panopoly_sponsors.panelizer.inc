@@ -155,7 +155,7 @@ function panopoly_sponsors_panelizer_defaults() {
     $pane->pid = 'new-5';
     $pane->panel = 'sidebar';
     $pane->type = 'entity_field';
-    $pane->subtype = 'node:field_sponsoring_level';
+    $pane->subtype = 'node:field_sponsorship_level';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(

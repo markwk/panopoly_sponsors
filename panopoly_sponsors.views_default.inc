@@ -56,15 +56,14 @@ function panopoly_sponsors_views_default_views() {
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = '';
   $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
-  /* Field: Field: Sponsorship Level */
+  /* Field: Content: Sponsorship Level */
   $handler->display->display_options['fields']['field_sponsorship_level']['id'] = 'field_sponsorship_level';
   $handler->display->display_options['fields']['field_sponsorship_level']['table'] = 'field_data_field_sponsorship_level';
   $handler->display->display_options['fields']['field_sponsorship_level']['field'] = 'field_sponsorship_level';
-  /* Sort criterion: Content: Title */
-  $handler->display->display_options['sorts']['title']['id'] = 'title';
-  $handler->display->display_options['sorts']['title']['table'] = 'node';
-  $handler->display->display_options['sorts']['title']['field'] = 'title';
-  $handler->display->display_options['sorts']['title']['order'] = 'DESC';
+  /* Sort criterion: Content: Sponsorship Level (field_sponsorship_level) */
+  $handler->display->display_options['sorts']['field_sponsorship_level_value']['id'] = 'field_sponsorship_level_value';
+  $handler->display->display_options['sorts']['field_sponsorship_level_value']['table'] = 'field_data_field_sponsorship_level';
+  $handler->display->display_options['sorts']['field_sponsorship_level_value']['field'] = 'field_sponsorship_level_value';
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';

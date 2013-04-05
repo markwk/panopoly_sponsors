@@ -5,22 +5,6 @@
  */
 
 /**
- * Implements hook_commerce_product_default_types().
- */
-function panopoly_sponsors_commerce_product_default_types() {
-  $items = array(
-    'sponsor_event' => array(
-      'type' => 'sponsor_event',
-      'name' => 'Sponsor Event',
-      'description' => '',
-      'help' => '',
-      'revision' => '1',
-    ),
-  );
-  return $items;
-}
-
-/**
  * Implements hook_ctools_plugin_api().
  */
 function panopoly_sponsors_ctools_plugin_api() {

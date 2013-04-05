@@ -94,5 +94,43 @@ function panopoly_sponsors_strongarm() {
   $strongarm->value = 0;
   $export['node_submitted_panopoly_sponsor'] = $strongarm;
 
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'panelizer_defaults_node_panopoly_sponsor';
+  $strongarm->value = array(
+    'status' => 1,
+    'view modes' => array(
+      'page_manager' => array(
+        'status' => 1,
+        'default' => 1,
+        'choice' => 0,
+      ),
+      'default' => array(
+        'status' => 1,
+        'default' => 1,
+        'choice' => 0,
+      ),
+      'teaser' => array(
+        'status' => 1,
+        'default' => 1,
+        'choice' => 0,
+      ),
+      'featured' => array(
+        'status' => 1,
+        'default' => 1,
+        'choice' => 0,
+      ),
+    ),
+  );
+  $export['panelizer_defaults_node_panopoly_sponsor'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_panopoly_sponsor_pattern';
+  $strongarm->value = 'sponsor/[node:title]';
+  $export['pathauto_node_panopoly_sponsor_pattern'] = $strongarm;
+
   return $export;
 }
